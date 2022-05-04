@@ -1,11 +1,11 @@
 Summary:	Embeddable Javascript engine with a focus on portability and compact footprint
 Name:		duktape
-Version:	2.6.0
+Version:	2.7.0
 Release:	1
 License:	MIT
 Group:		Libraries
 Source0:	https://duktape.org/%{name}-%{version}.tar.xz
-# Source0-md5:	01ee8ecf3dd5c6504543c8679661bb20
+# Source0-md5:	b3200b02ab80125b694bae887d7c1ca6
 Patch0:		%{name}-build.patch
 URL:		https://duktape.org/
 BuildRequires:	tar >= 1:1.22
@@ -58,15 +58,17 @@ Pliki nagłówkowe biblioteki %{name}.
 %{__make} -f Makefile.sharedlibrary \
 	CC="%{__cc}" \
 	CFLAGS="%{rpmcppflags} %{rpmcflags}" \
-	LDFLAGS="%{rpmldflags}"
+	LDFLAGS="%{rpmldflags}" \
+	INSTALL_PREFIX=%{_prefix} \
+	LIBDIR="/%{_lib}"
 
 %install
 rm -rf $RPM_BUILD_ROOT
 
 %{__make} -f Makefile.sharedlibrary install \
 	DESTDIR=$RPM_BUILD_ROOT \
-	LIBDIR=%{_libdir} \
-	INCLUDEDIR=%{_includedir}
+	INSTALL_PREFIX=%{_prefix} \
+	LIBDIR="/%{_lib}"
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -78,10 +80,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc AUTHORS.rst README.rst
 %attr(755,root,root) %{_libdir}/libduktape.so.*.*
-%attr(755,root,root) %ghost %{_libdir}/libduktape.so.206
+%attr(755,root,root) %ghost %{_libdir}/libduktape.so.207
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libduktape.so
 %{_includedir}/duk_config.h
 %{_includedir}/duktape.h
+%{_pkgconfigdir}/duktape.pc
